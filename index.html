@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <title>Connect with BLE device</title>
+</head>
+<body>
+    <form>
+        <button id="btn-connect">Connect with BLE device</button>
+    </form>
+    <script>
+        console.log("Running script...")
+
+        function isWebBLEAvailable() {
+            if(!navigator.bluetooth) {
+                console.log("Web BLE is not available!")
+                return false;
+            }
+
+            return true;
+        }
+
+        const deviceName = "Nano 33 IOT"
+        function getDeviceInfo() {
+            // let options = {
+            //     acceptAllDevices: true // will allow connections to any device
+            // }
+
+            let options = {
+                filters: [
+                    {name: deviceName} // will filter list of devices you can pair with
+                ]
+            }
+
+            console.log("Requesting BLE device info...")
+            navigator.bluetooth.requestDevice(options)
+            .then(device => {
+                console.log("Name: " + device.name)
+            })
+            .catch(error => {
+                console.log("Request device error: " + error)
+            })
+        }
+
+        const btn = document.getElementById("btn-connect")
+
+        btn.addEventListener("click", function(event) {
+            console.log("Connect btn pressed")
+            event.stopPropagation()
+            event.preventDefault()
+
+            if(isWebBLEAvailable()) {
+                getDeviceInfo()
+            }
+        })
+    </script>
+</body>
+
+</html>
